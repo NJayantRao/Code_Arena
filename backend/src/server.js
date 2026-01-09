@@ -1,5 +1,6 @@
 import express from "express";
 import { ENV } from "./lib/env.js";
+import { db } from "./lib/db.js";
 
 const app= express()
 
@@ -11,5 +12,4 @@ app.get("/",(req,res)=>{
 
 app.listen(port,()=>{
     console.log(`Server running on port ${port}...`);
-    console.log(`${ENV.DB_URL}`)
 })
