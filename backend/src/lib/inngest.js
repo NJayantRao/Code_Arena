@@ -1,0 +1,41 @@
+import { Inngest } from "inngest";
+import { db } from "./db.js";
+import { User } from "../models/User.js";
+
+export const inngest = new Inngest({ id: "code-arena" });
+
+const syncUser = inngest.createFunction(
+  { id: "sync-user" },
+  { event: "clerk/user.created" },
+  async (event) => {
+    const { id, email_addresses, first_name, last_name, image_url } =
+      event.data;
+
+            console.log(id,email_addresses[0],first_name,last_name,image_url);
+
+
+    const newUser = {
+      clerkId: id,
+      email: email_addresses[0]?.email_address,
+      name: `${first_name || ""} ${last_name || ""}`,
+      profileImage:image_url
+    };
+    console.log("user created...",newUser);
+    
+    await User.create(newUser)
+  }
+);
+
+const deleteUser = inngest.createFunction(
+  { id: "delete-user-from-db" },
+  { event: "clerk/user.deleted" },
+  async (event) => {
+    const { id } =
+      event.data;
+      console.log(id);
+      
+    await User.deleteOne({clerkId:id})
+  }
+);
+
+export const functions=[syncUser,deleteUser]
