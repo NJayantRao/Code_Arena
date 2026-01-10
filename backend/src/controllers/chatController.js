@@ -3,7 +3,7 @@ import { chatClient } from "../lib/stream.js";
 export async function getStreamToken(req,res) {
    try {
     //clerk id is used as using this only stream user is created
-    const token= chatClient.createToken(req.user.clerkId)
+    const token= chatClient.createToken(req.user.clerkId) 
 
     res.status(200).json({
         msg:"Stream Token created Successfully",
