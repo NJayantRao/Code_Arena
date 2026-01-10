@@ -48,23 +48,55 @@ const createSession = async (req, res) => {
 };
 const getActiveSessions = async (req, res) => {
   try {
-    console.log("Session");
+    const activeSessions = await Session.find({ status: "Active" })
+      .populate("host", "name profileImage email clerkId")
+      .sort({ createdAt: -1 })
+      .limit(20);
+
+    res
+      .status(200)
+      .json({ msg: "Active sessions fetched successfully...", activeSessions });
   } catch (error) {
-    console.log(error);
+    console.log("Error in get active Session controller", error);
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 const getMyRecentSessions = async (req, res) => {
   try {
-    console.log("Session");
+    const userId = req.user._id;
+    const sessions = await Session.find({
+      status: "Completed",
+      $or: [{ host: userId }, { participant: userId }],
+    })
+      .sort({ createdAt: -1 })
+      .limit(20);
+
+    res
+      .status(200)
+      .json({ msg: "Recent sessions fetched successfully", sessions });
   } catch (error) {
-    console.log(error);
+    console.log("Error in get recent Session controller", error);
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 const getSessionById = async (req, res) => {
-  console.log("Session");
   try {
+    const sessionId = req.params.id;
+    const session= await Session.findById(sessionId).populate(
+      "host",
+      "name profileImage email clerkId"
+    )
+    .populate(
+      "participant",
+      "name profileImage email clerkId"
+    )
+
+    if(!session) return res.status(404).json({msg:"Session not found"})
+
+      res.status(200).json({msg:"Fetched session by id"})
   } catch (error) {
-    console.log(error);
+    console.log("Error in get Session by id controller", error);
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 const joinSession = async (req, res) => {
@@ -82,4 +114,11 @@ const endSession = async (req, res) => {
   }
 };
 
-export {createSession,getActiveSessions,getMyRecentSessions,getSessionById,joinSession,endSession}
+export {
+  createSession,
+  getActiveSessions,
+  getMyRecentSessions,
+  getSessionById,
+  joinSession,
+  endSession,
+};
