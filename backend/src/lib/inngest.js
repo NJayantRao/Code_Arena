@@ -12,7 +12,7 @@ const syncUser = inngest.createFunction(
   async (event) => {
     console.log(event);
     
-    const user = event.data?.user || event.user;
+    const user = event.event.data?.user || event.event.user;
 const { id, email_addresses, first_name, last_name, image_url } = user;
     
     console.log("Reached inngest user endpoint...")
@@ -37,7 +37,7 @@ const deleteUser = inngest.createFunction(
   async (event) => {
         console.log(event);
 
-    const user = event.data?.user || event.user;
+    const user = event.event.data?.user || event.event.user;
 const { id } = user;
       console.log(id);
       
