@@ -4,13 +4,16 @@ import { User } from "../models/User.js";
 
 export const inngest = new Inngest({ id: "code-arena" });
 
+console.log("Reached inngest endpoint...")
+
 const syncUser = inngest.createFunction(
   { id: "sync-user" },
   { event: "clerk/user.created" },
   async (event) => {
-    const { id, email_addresses, first_name, last_name, image_url } =
-      event.data;
-
+    const user = event.data?.user || event.user;
+const { id, email_addresses, first_name, last_name, image_url } = user;
+    
+    console.log("Reached inngest user endpoint...")
             console.log(id,email_addresses[0],first_name,last_name,image_url);
 
 
@@ -30,8 +33,8 @@ const deleteUser = inngest.createFunction(
   { id: "delete-user-from-db" },
   { event: "clerk/user.deleted" },
   async (event) => {
-    const { id } =
-      event.data;
+    const user = event.data?.user || event.user;
+const { id } = user;
       console.log(id);
       
     await User.deleteOne({clerkId:id})
