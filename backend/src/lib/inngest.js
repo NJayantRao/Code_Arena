@@ -1,6 +1,7 @@
 import { Inngest } from "inngest";
 import { db } from "./db.js";
 import { User } from "../models/User.js";
+import { deleteStreamUser, upsertStreamUser } from "./stream.js";
 
 export const inngest = new Inngest({ id: "code-arena" });
 
@@ -32,6 +33,12 @@ const primaryEmail =
     console.log("user created...",newUser);
     
     await User.create(newUser)
+
+    await upsertStreamUser({
+      id:newUser.clerkId.toString(),
+      name:newUser.name,
+      image:newUser.profileImage
+    })
   }
 );
 
@@ -46,6 +53,7 @@ const { id } = user;
       console.log(id);
       
     await User.deleteOne({clerkId:id})
+    await deleteStreamUser(id.toString())
   }
 );
 
