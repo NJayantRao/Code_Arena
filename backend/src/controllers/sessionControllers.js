@@ -82,18 +82,13 @@ const getMyRecentSessions = async (req, res) => {
 const getSessionById = async (req, res) => {
   try {
     const sessionId = req.params.id;
-    const session= await Session.findById(sessionId).populate(
-      "host",
-      "name profileImage email clerkId"
-    )
-    .populate(
-      "participant",
-      "name profileImage email clerkId"
-    )
+    const session = await Session.findById(sessionId)
+      .populate("host", "name profileImage email clerkId")
+      .populate("participant", "name profileImage email clerkId");
 
-    if(!session) return res.status(404).json({msg:"Session not found"})
+    if (!session) return res.status(404).json({ msg: "Session not found" });
 
-      res.status(200).json({msg:"Fetched session by id"})
+    res.status(200).json({ msg: "Fetched session by id" });
   } catch (error) {
     console.log("Error in get Session by id controller", error);
     res.status(500).json({ msg: "Internal Server Error" });
@@ -101,16 +96,58 @@ const getSessionById = async (req, res) => {
 };
 const joinSession = async (req, res) => {
   try {
-    console.log("Session");
+    const sessionId = req.params.id;
+    const userId = req.user.id;
+    const clerkId = req.user.clerkId;
+
+    const session = await Session.findById(sessionId);
+    if (!session) return res.status(404).json({ msg: "Session not found" });
+    //check session is already full
+    if (session.participant)
+      return res.status(404).json({ msg: "Session is full." });
+    session.participant = userId;
+    await session.save();
+
+    const channel= chatClient.channel("messaging",session.callId)
+    await channel.addMembers([clerkId])
+
+    res.status(200).json({
+      msg:"Joined session successfully",
+      session
+    })
   } catch (error) {
-    console.log(error);
+    console.log("Error in join Session controller", error);
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 const endSession = async (req, res) => {
   try {
-    console.log("Session");
+    const sessionId = req.params.id;
+    const userId = req.user.id;
+    const clerkId = req.user.clerkId;
+
+    const session = await Session.findById(sessionId);
+    if (!session) return res.status(404).json({ msg: "Session not found" });
+
+    //only host can end the session
+    if(session.host != session.userId)
+      return res.status(403).json({msg:"Only the host can end session"})
+
+    //if already completed
+    if(session.status === "Completed") return res.status(400).json({msg:"Session already completed"})
+      session.status= "Completed"
+    await session.save()
+
+    const call= streamClient.video.call("default",session.callId)
+    await call.delete({hard:true})
+
+    const channel= chatClient.channel("messaging",session.callId)
+    await channel.delete()
+
+    res.status(200).json({msg:"Session ended successfully",session})
   } catch (error) {
-    console.log(error);
+     console.log("Error in end Session controller", error);
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
