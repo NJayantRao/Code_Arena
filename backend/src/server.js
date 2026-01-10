@@ -4,6 +4,8 @@ import { ENV } from "./lib/env.js";
 import { db } from "./lib/db.js";
 import {serve} from "inngest/express"
 import { inngest, functions } from "./lib/inngest.js";
+import { clerkMiddleware } from '@clerk/express'
+import { chatRouter } from "./routes/chatRouter.js";
 
 const app= express()
 
@@ -17,11 +19,16 @@ app.use(cors({
 
 const port=ENV.PORT || 3000
 
+app.use(clerkMiddleware())
 app.use("/api/inngest",serve({client:inngest,functions}))
+
+app.use("/api/v1/chat",chatRouter)
 
 app.get("/",(req,res)=>{
     res.status(200).json({msg:"Server up n running..."})
 })
+
+
 
 app.listen(port,()=>{
     console.log(`Server running on port ${port}...`);
