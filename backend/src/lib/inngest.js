@@ -10,6 +10,8 @@ const syncUser = inngest.createFunction(
   { id: "sync-user" },
   { event: "clerk/user.created" },
   async (event) => {
+    console.log(event);
+    
     const user = event.data?.user || event.user;
 const { id, email_addresses, first_name, last_name, image_url } = user;
     
@@ -33,6 +35,8 @@ const deleteUser = inngest.createFunction(
   { id: "delete-user-from-db" },
   { event: "clerk/user.deleted" },
   async (event) => {
+        console.log(event);
+
     const user = event.data?.user || event.user;
 const { id } = user;
       console.log(id);
