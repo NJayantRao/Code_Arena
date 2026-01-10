@@ -12,16 +12,20 @@ const syncUser = inngest.createFunction(
   async (event) => {
     console.log(event);
     
-    const user = event.event.data?.user || event.event.user;
+    const user = event.event.data
 const { id, email_addresses, first_name, last_name, image_url } = user;
     
     console.log("Reached inngest user endpoint...")
             console.log(id,email_addresses[0],first_name,last_name,image_url);
+const primaryEmail =
+  user.email_addresses?.find(e => e.id === user.primary_email_address_id)?.email_address ||
+  user.email_addresses?.[0]?.email_address ||
+  null;
 
 
     const newUser = {
       clerkId: id,
-      email: email_addresses[0]?.email_address,
+      email: primaryEmail,
       name: `${first_name || ""} ${last_name || ""}`,
       profileImage:image_url
     };
@@ -37,7 +41,7 @@ const deleteUser = inngest.createFunction(
   async (event) => {
         console.log(event);
 
-    const user = event.event.data?.user || event.event.user;
+const user = event.event.data
 const { id } = user;
       console.log(id);
       
