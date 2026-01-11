@@ -4,7 +4,7 @@ import { Session } from "../models/Session.js";
 const createSession = async (req, res) => {
   try {
     const { problem, difficulty } = req.body;
-    const userId = req.user.id;
+    const userId = req.user._id;
     const clerkId = req.user.clerkId;
 
     if (!problem || !difficulty)
@@ -88,7 +88,7 @@ const getSessionById = async (req, res) => {
 
     if (!session) return res.status(404).json({ msg: "Session not found" });
 
-    res.status(200).json({ msg: "Fetched session by id" });
+    res.status(200).json({ msg: "Fetched session by id",session });
   } catch (error) {
     console.log("Error in get Session by id controller", error);
     res.status(500).json({ msg: "Internal Server Error" });
@@ -104,7 +104,7 @@ const joinSession = async (req, res) => {
     if (!session) return res.status(404).json({ msg: "Session not found" });
     //check session is already full
     if (session.participant)
-      return res.status(404).json({ msg: "Session is full." });
+      return res.status(409).json({ msg: "Session is full." });
     session.participant = userId;
     await session.save();
 
@@ -123,14 +123,14 @@ const joinSession = async (req, res) => {
 const endSession = async (req, res) => {
   try {
     const sessionId = req.params.id;
-    const userId = req.user.id;
+    const userId = req.user._id;
     const clerkId = req.user.clerkId;
 
     const session = await Session.findById(sessionId);
     if (!session) return res.status(404).json({ msg: "Session not found" });
 
     //only host can end the session
-    if(session.host != session.userId)
+    if(session.host.toString() != userId)
       return res.status(403).json({msg:"Only the host can end session"})
 
     //if already completed
