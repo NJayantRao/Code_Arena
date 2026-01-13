@@ -1,10 +1,9 @@
 import React from "react";
-import Navbar from "../components/common/Navbar";
-import HeroSection from "../components/common/HeroSection";
+import Navbar from "../components/landing/Navbar";
+import HeroSection from "../components/landing/HeroSection";
 import Features from "../components/landing/Features";
 
 function Home() {
-  
   return (
     <div className="bg-gradient-to-br from-base-100 via-base-200 to-base-300">
       {/* NAVBAR */}
