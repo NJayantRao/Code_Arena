@@ -18,6 +18,9 @@ app.use(cors({
       credentials:true,
 }))
 
+app.options('*', cors());
+
+
 const port=ENV.PORT || 3000
 
 app.use(clerkMiddleware())
