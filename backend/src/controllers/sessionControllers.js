@@ -24,6 +24,9 @@ const createSession = async (req, res) => {
       callId,
     });
 
+    console.log("reached");
+    
+
     await streamClient.video.call("default", callId).getOrCreate({
       data: {
         created_by_id: clerkId,
