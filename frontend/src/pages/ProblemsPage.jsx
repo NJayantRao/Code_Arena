@@ -20,7 +20,7 @@ const ProblemsPage = () => {
         </div>
         <div className="space-y-4">
           {problemList.map((ele) => {
-            return <ProblemCard key={ele.id} title={ele.title} difficulty={ele.difficulty} category={ele.category} description={ele.description} />
+            return <ProblemCard key={ele.id} id={ele.id} title={ele.title} difficulty={ele.difficulty} category={ele.category} description={ele.description} />
           })}
         </div>
       </div>

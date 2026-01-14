@@ -1,8 +1,10 @@
 import React from 'react'
 import { getDifficultyBadge } from '../../../lib/difficulty'
 import { ChevronRightIcon, Code2Icon } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const ProblemCard = ({id,title,difficulty,category,description}) => {
+  const navigate= useNavigate()
   return (
     <div
                 key={id}
@@ -38,7 +40,11 @@ const ProblemCard = ({id,title,difficulty,category,description}) => {
                       </p>
                     </div>
                     {/* RIGHT SIDE */}
-                    <div className="flex items-center gap-2 text-green-600">
+                    <div className="flex items-center gap-2 text-green-600 cursor-pointer" onClick={()=>{
+                      navigate(`/problem/${id}`)
+                      
+                      
+                    }}>
                       <span className="font-medium">Solve</span>
                       <ChevronRightIcon className="size-5" />
                     </div>
