@@ -16,9 +16,11 @@ app.use(cors({
     origin:[ENV.FRONTEND_URL,"http://localhost:5173",
       "http://127.0.0.1:5173",],
       credentials:true,
+       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 }))
 
-app.options('*', cors());
+app.options(/.*/, cors());
 
 
 const port=ENV.PORT || 3000
