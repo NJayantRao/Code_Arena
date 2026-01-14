@@ -6,7 +6,7 @@ import Dashboard from './pages/Dashboard'
 import { useUser } from '@clerk/clerk-react'
 import ProblemPage from './pages/ProblemPage'
 import { Toaster } from 'react-hot-toast'
-import Session from './pages/session'
+import Session from './pages/Session'
 
 const App = () => {
 const {isSignedIn,isLoaded}= useUser()
