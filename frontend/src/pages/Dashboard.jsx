@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createSession } from "../services/sessions";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import Navbar from "../components/common/Navbar";
 import Welcome from "../components/Welcome";
 import StatCard from "../components/ui/cards/StatCard";
@@ -12,10 +12,14 @@ import RecentSessions from "../components/RecentSessions";
 import CreateSessionModal from "../components/ui/modals/CreateSessionModal";
 
 const Dashboard = () => {
+  const { getToken } = useAuth();
   const queryClient = useQueryClient();
 
   const createSessionMutation = useMutation({
-    mutationFn: createSession,
+     mutationFn: async (payload) => {
+    const token = await getToken();
+    return createSession({ data: payload, token });
+  },
     onSuccess: () => {
       toast.success("Session Created Successfully...");
     },

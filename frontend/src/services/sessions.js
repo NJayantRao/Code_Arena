@@ -1,10 +1,16 @@
 import axios from "axios";
 import  axiosInstance  from "../lib/axios";
+import { useAuth } from "@clerk/clerk-react";
 
+    
+    export const createSession= async ({data,token}) => {
+console.log(token);
 
-
-export const createSession= async (data) => {
-    const response = await axiosInstance.post("/session", data);
+    const response = await axiosInstance.post("/session",data,
+         {headers:{
+            Authorization:`Bearer ${token}`
+         }}
+         );
     console.log(response);
     
     return response.data
