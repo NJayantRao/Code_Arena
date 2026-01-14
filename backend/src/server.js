@@ -14,7 +14,7 @@ const app= express()
 app.use(express.json())
 app.use(cors({
     origin:[ENV.FRONTEND_URL,"http://localhost:5173",
-      "http://127.0.0.1:5173",],
+      "http://127.0.0.1:5173","https://code-arena-psi.vercel.app"],
       credentials:true,
        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
