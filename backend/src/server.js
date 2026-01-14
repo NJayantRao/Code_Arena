@@ -24,7 +24,7 @@ app.use(clerkMiddleware())
 app.use("/api/inngest",serve({client:inngest,functions}))
 
 app.use("/api/v1/chat",chatRouter)
-app.use("/api/v1/sessions",sessionRouter)
+app.use("/api/v1/session",sessionRouter)
 
 app.get("/api/v1",(req,res)=>{
     res.status(200).json({msg:"Server up n running..."})
