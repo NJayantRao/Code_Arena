@@ -3,14 +3,11 @@ import axiosInstance from "../lib/axios";
 import { useAuth } from "@clerk/clerk-react";
 
 export const createSession = async ({ data, token }) => {
-  console.log(token);
-
   const response = await axiosInstance.post("/session", data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  // console.log(response)
   return response.data;
 };
 
@@ -20,8 +17,6 @@ export const getActiveSessions = async (token) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  //   console.log(response);
-
   return response.data;
 };
 
@@ -34,6 +29,14 @@ export const getMyRecentSessions = async (token) => {
   return response.data;
 };
 
+export const getTotalSessions = async (token) => {
+  const response = await axiosInstance.get("/session/myTotalSessions", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
 export const getSessionById = async (id, token) => {
   const response = await axiosInstance.get(`/session/${id}`, {
     headers: {

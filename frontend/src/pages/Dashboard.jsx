@@ -36,8 +36,8 @@ const Dashboard = () => {
       toast.success("Session Created Successfully...");
     },
     onError: (error) => {
-      toast.error("Failed to create Session!");
-      console.log(error);
+      toast.error(error?.response?.data || "Failed to create Session!");
+      // console.log(error);
     },
   });
 
@@ -72,6 +72,7 @@ const Dashboard = () => {
     isPending: isActiveSessionPending,
     error: activeSessionError,
   } = activeSessions;
+
   const activeSession = activeSessionData?.activeSessions;
 
   // console.log(data,isLoading,isPending,error);
@@ -95,12 +96,7 @@ const Dashboard = () => {
 
   const recentSession = recentSessionData?.sessions;
 
-  // console.log(recentSessionData, isRecentSessionLoading, isRecentSessionPending, recentSessionError);
-  // console.log(recentSession);
-  // console.log(activeSessionData?.sessions);
-  // console.log(recentSessionData?.sessions);
-
-  const activeSessionsCount = activeSessionData?.sessions || [];
+  const activeSessionsCount = activeSessionData?.activeSessions || [];
   const recentSessionsCount = recentSessionData?.sessions || [];
 
   const isUserInSession = (session) => {

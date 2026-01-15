@@ -1,8 +1,8 @@
 import { TrophyIcon, UsersIcon } from "lucide-react";
 
 function StatsCards({ activeSessionsCount, recentSessionsCount }) {
-  console.log(activeSessionsCount);
-  console.log(recentSessionsCount);
+  // console.log(activeSessionsCount);
+  // console.log(recentSessionsCount);
 
   return (
     <div className="lg:col-span-1 grid grid-cols-1 gap-6">
@@ -35,7 +35,7 @@ function StatsCards({ activeSessionsCount, recentSessionsCount }) {
             </div>
           </div>
           <div className="text-4xl font-black mb-1">{recentSessionsCount}</div>
-          <div className="text-sm opacity-60">Total Sessions</div>
+          <div className="text-sm opacity-60">Recent Sessions</div>
         </div>
       </div>
     </div>

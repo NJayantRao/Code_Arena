@@ -28,36 +28,41 @@ function RecentSessions({ sessions, isLoading }) {
                     : "bg-base-200 border-base-300 hover:border-primary/30"
                 }`}
               >
-                {session.status === "active" && (
-                  <div className="absolute top-3 right-3">
-                    <div className="badge badge-success gap-1">
-                      <div className="w-1.5 h-1.5 bg-success rounded-full animate-pulse" />
-                      ACTIVE
-                    </div>
-                  </div>
-                )}
-
                 <div className="card-body p-5">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div
-                      className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                        session.status === "active"
-                          ? "bg-gradient-to-br from-success to-success/70"
-                          : "bg-gradient-to-br from-primary to-secondary"
-                      }`}
-                    >
-                      <Code2 className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-base mb-1 truncate">
-                        {session.problem}
-                      </h3>
-                      <span
-                        className={`badge badge-sm ${getDifficultyBadge(session.difficulty)}`}
+                  <div className="flex items-start justify-between gap-3 mb-4">
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                          session.status === "active"
+                            ? "bg-gradient-to-br from-success to-success/70"
+                            : "bg-gradient-to-br from-primary to-secondary"
+                        }`}
                       >
-                        {session.difficulty}
-                      </span>
+                        <Code2 className="w-6 h-6 text-white" />
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-base mb-1 line-clamp-2">
+                          {session.problem}
+                        </h3>
+                        <span
+                          className={`badge badge-sm ${getDifficultyBadge(
+                            session.difficulty
+                          )}`}
+                        >
+                          {session.difficulty}
+                        </span>
+                      </div>
                     </div>
+
+                    {session.status === "active" && (
+                      <div className="flex items-center gap-1">
+                        <div className="status status-success animate-pulse"></div>
+                        <div className=" badge badge-success gap-1 whitespace-nowrap">
+                          ACTIVE
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="space-y-2 text-sm opacity-80 mb-4">
