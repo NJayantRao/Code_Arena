@@ -25,7 +25,6 @@ const createSession = async (req, res) => {
     });
 
     console.log("reached");
-    
 
     await streamClient.video.call("default", callId).getOrCreate({
       data: {
@@ -53,6 +52,7 @@ const getActiveSessions = async (req, res) => {
   try {
     const activeSessions = await Session.find({ status: "Active" })
       .populate("host", "name profileImage email clerkId")
+      .populate("participant", "name profileImage email clerkId")
       .sort({ createdAt: -1 })
       .limit(20);
 
@@ -91,7 +91,7 @@ const getSessionById = async (req, res) => {
 
     if (!session) return res.status(404).json({ msg: "Session not found" });
 
-    res.status(200).json({ msg: "Fetched session by id",session });
+    res.status(200).json({ msg: "Fetched session by id", session });
   } catch (error) {
     console.log("Error in get Session by id controller", error);
     res.status(500).json({ msg: "Internal Server Error" });
@@ -100,7 +100,7 @@ const getSessionById = async (req, res) => {
 const joinSession = async (req, res) => {
   try {
     const sessionId = req.params.id;
-    const userId = req.user.id;
+    const userId = req.user._id;
     const clerkId = req.user.clerkId;
 
     const session = await Session.findById(sessionId);
@@ -111,13 +111,13 @@ const joinSession = async (req, res) => {
     session.participant = userId;
     await session.save();
 
-    const channel= chatClient.channel("messaging",session.callId)
-    await channel.addMembers([clerkId])
+    const channel = chatClient.channel("messaging", session.callId);
+    await channel.addMembers([clerkId]);
 
     res.status(200).json({
-      msg:"Joined session successfully",
-      session
-    })
+      msg: "Joined session successfully",
+      session,
+    });
   } catch (error) {
     console.log("Error in join Session controller", error);
     res.status(500).json({ msg: "Internal Server Error" });
@@ -133,23 +133,24 @@ const endSession = async (req, res) => {
     if (!session) return res.status(404).json({ msg: "Session not found" });
 
     //only host can end the session
-    if(session.host.toString() != userId)
-      return res.status(403).json({msg:"Only the host can end session"})
+    if (session.host.toString() != userId)
+      return res.status(403).json({ msg: "Only the host can end session" });
 
     //if already completed
-    if(session.status === "Completed") return res.status(400).json({msg:"Session already completed"})
-      session.status= "Completed"
-    await session.save()
+    if (session.status === "Completed")
+      return res.status(400).json({ msg: "Session already completed" });
+    session.status = "Completed";
+    await session.save();
 
-    const call= streamClient.video.call("default",session.callId)
-    await call.delete({hard:true})
+    const call = streamClient.video.call("default", session.callId);
+    await call.delete({ hard: true });
 
-    const channel= chatClient.channel("messaging",session.callId)
-    await channel.delete()
+    const channel = chatClient.channel("messaging", session.callId);
+    await channel.delete();
 
-    res.status(200).json({msg:"Session ended successfully",session})
+    res.status(200).json({ msg: "Session ended successfully", session });
   } catch (error) {
-     console.log("Error in end Session controller", error);
+    console.log("Error in end Session controller", error);
     res.status(500).json({ msg: "Internal Server Error" });
   }
 };

@@ -13,81 +13,95 @@ const CreateSessionModal = ({
   const problemsList = Object.values(problems);
   if (!isOpen) return null;
   return (
-    <div className="modal modal-open">
-      <div className="modal-box max-w-2xl">
-        <h3 className="font-bold text-2xl mb-6">Create New Session</h3>
+    <div className="modal modal-open backdrop-blur-sm">
+      <div className="modal-box max-w-2xl p-6 bg-base-200 border border-base-300 shadow-xl rounded-xl">
+        {/* TITLE */}
+        <h3 className="text-2xl font-black flex items-center gap-2">
+          Create New Session
+        </h3>
+        <p className="text-sm opacity-70 mb-4">
+          Choose a coding problem and spin up a live session.
+        </p>
 
-        <div className="space-y-8">
-          <label className="label">
-            <span className="label-text font-semibold">Select Problem</span>
-            <span className="label-text-alt text-error">*</span>
-          </label>
+        {/* SELECT */}
+        <label className="text-sm font-semibold flex items-center gap-1 mb-2">
+          Select Problem <span className="text-error">*</span>
+        </label>
 
-          <select
-            className="select w-full truncate"
-            value={roomConfig.problem}
-            onChange={(e) => {
-              const selectedProblem = problemsList.find(
-                (p) => p.title === e.target.value
-              );
-              setRoomConfig({
-                problem: e.target.value,
-                difficulty: selectedProblem.difficulty,
-              });
-            }}
-          >
-            <option value="" disabled className="rounded-xl">
-              Select a Coding problem...
+        <select
+          className="select select-bordered w-full bg-base-100 rounded-lg"
+          value={roomConfig.problem}
+          onChange={(e) => {
+            const selectedProblem = problemsList.find(
+              (p) => p.title === e.target.value
+            );
+            setRoomConfig({
+              problem: e.target.value,
+              difficulty: selectedProblem.difficulty,
+            });
+          }}
+        >
+          <option value="" disabled className="rounded-xl">
+            Pick a coding challenge...
+          </option>
+          {problemsList.map((ele) => (
+            <option key={ele.id} value={ele.title}>
+              {ele.title} ({ele.difficulty})
             </option>
-            {problemsList.map((ele) => {
-              return (
-                <option
-                  key={ele.id}
-                  value={ele.title}
-                  className="rounded-xl truncate"
-                >
-                  {ele.title} ({ele.difficulty})
-                </option>
-              );
-            })}
-          </select>
-        </div>
+          ))}
+        </select>
+
+        {/* SUMMARY CARD */}
         {roomConfig.problem && (
-          <div className="alert bg-green-500 text-black">
-            <Code2Icon className="size-5" />
-            <div>
-              <p className="font-semibold">Room Summary:</p>
-              <p>
-                Problem:{" "}
-                <span className="font-medium">{roomConfig.problem}</span>
-              </p>
-              <p>
-                Max Participants:{" "}
-                <span className="font-medium">2 (1-on-1 session)</span>
-              </p>
+          <div className="mt-4 rounded-xl border border-success/40 bg-success/10 p-4 space-y-1">
+            <div className="flex items-center gap-2">
+              <Code2Icon className="size-5 text-success" />
+              <p className="font-semibold text-success">Room Summary</p>
             </div>
+            <p className="text-sm">
+              <span className="opacity-70">Problem:</span>{" "}
+              <span className="font-medium">{roomConfig.problem}</span>
+            </p>
+            <p className="text-sm">
+              <span className="opacity-70">Max Participants:</span>{" "}
+              <span className="font-medium">2 (1-on-1)</span>
+            </p>
+            <p className="text-sm">
+              <span className="opacity-70">Difficulty:</span>{" "}
+              <span className="badge badge-sm badge-outline badge-success">
+                {roomConfig.difficulty}
+              </span>
+            </p>
           </div>
         )}
-        <div className="modal-action">
+
+        {/* ACTIONS */}
+        <div className="modal-action mt-6 gap-3">
           <button className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn bg-green-600" onClick={onCreateSession} disabled={isCreating || !roomConfig.problem}>
+
+          <button
+            className="btn bg-emerald-600 hover:bg-emerald-500 text-white gap-2 border-none rounded-lg"
+            disabled={isCreating || !roomConfig.problem}
+            onClick={onCreateSession}
+          >
             {isCreating ? (
-              <div className="flex gap-2">
+              <>
                 <Loader2Icon className="size-5 animate-spin" />
                 Creating...
-              </div>
+              </>
             ) : (
-              <div className="flex gap-2">
+              <>
                 <Plus className="size-5" />
-                Create
-              </div>
+                Create Session
+              </>
             )}
           </button>
         </div>
       </div>
-      <div className="modal-backdrop" onClick={onClose}></div>
+
+      <div className="modal-backdrop" onClick={onClose} />
     </div>
   );
 };

@@ -10,9 +10,6 @@ function WelcomeSection({ onCreateSession }) {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              {/* <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-                <SparklesIcon className="w-6 h-6 text-white" />
-              </div> */}
               <h1 className="text-5xl font-black bg-gradient-to-r from-green-500 via-green-600 to-green-600 bg-clip-text text-transparent">
                 Welcome back, {user?.firstName || "there"}!
               </h1>
@@ -23,7 +20,7 @@ function WelcomeSection({ onCreateSession }) {
           </div>
           <button
             onClick={onCreateSession}
-            className="group px-6 py-4 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl transition-all duration-200 hover:opacity-90"
+            className="group px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl transition-all duration-200 hover:opacity-90"
           >
             <div className="flex items-center gap-2 text-white font-bold text-lg cursor-pointer">
               <ZapIcon className="w-6 h-6" />

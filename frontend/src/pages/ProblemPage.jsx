@@ -8,7 +8,7 @@ import CodeEditor from "../components/CodeEditor";
 import ProblemDescription from "../components/ProblemDescription";
 import { executeCode } from "../lib/piston";
 import { toast } from "react-hot-toast";
-import confetti from "canvas-confetti"
+import confetti from "canvas-confetti";
 
 const ProblemPage = () => {
   const { id } = useParams();
@@ -47,7 +47,7 @@ const ProblemPage = () => {
       .join("\n");
   };
 
-    const triggerConfetti = () => {
+  const triggerConfetti = () => {
     confetti({
       particleCount: 80,
       spread: 250,
@@ -59,7 +59,7 @@ const ProblemPage = () => {
       spread: 250,
       origin: { x: 0.8, y: 0.6 },
     });
-  }
+  };
 
   const checkIfTestsPassed = (actualOutput, expectedOutput) => {
     const normalizedActualOutput = normalizedOutput(actualOutput);
@@ -76,39 +76,37 @@ const ProblemPage = () => {
     setIsRunning(true);
     setOutput(null);
     const result = await executeCode(selectedLanguage, code);
-console.log("Result:", result.success, result.output || result.error);
-    
+    console.log("Result:", result.success, result.output || result.error);
+
     setOutput(result);
     setIsRunning(false);
 
     if (result.success) {
-  const expectedOutput = currentProblem.expectedOutput[selectedLanguage];
-  const passed = checkIfTestsPassed(result.output, expectedOutput);
-  setIsTestPassed(passed);
+      const expectedOutput = currentProblem.expectedOutput[selectedLanguage];
+      const passed = checkIfTestsPassed(result.output, expectedOutput);
+      setIsTestPassed(passed);
 
-  if (passed) {
-    triggerConfetti()
-    toast.success("All tests Passed");
-  } else {
-    setOutput({
-      success: false,
-      output: result.output,
-      error: `Expected:\n${expectedOutput}\n\nGot:\n${result.output}`
-    });
-    setIsRunning(false);
-    toast.error("Error");
-    return;
-  }
-} else{
-  toast.error("code execution failed")
-}
-
+      if (passed) {
+        triggerConfetti();
+        toast.success("All tests Passed");
+      } else {
+        setOutput({
+          success: false,
+          output: result.output,
+          error: `Expected:\n${expectedOutput}\n\nGot:\n${result.output}`,
+        });
+        setIsRunning(false);
+        toast.error("Error");
+        return;
+      }
+    } else {
+      toast.error("code execution failed");
+    }
   };
 
   useEffect(() => {
-  setCode(problems[currentProblemId].starterCode[selectedLanguage]);
-}, [currentProblemId, selectedLanguage]);
-
+    setCode(problems[currentProblemId].starterCode[selectedLanguage]);
+  }, [currentProblemId, selectedLanguage]);
 
   return (
     <div className="h-screen w-full bg-base-100 flex flex-col">
@@ -142,7 +140,7 @@ console.log("Result:", result.success, result.output || result.error);
               <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-row-resize" />
               {/* output */}
               <Panel defaultSize={40} minSize={30}>
-                <OutputPanel output={output}/>
+                <OutputPanel output={output} />
               </Panel>
             </PanelGroup>
           </Panel>
