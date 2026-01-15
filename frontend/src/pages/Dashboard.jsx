@@ -36,7 +36,7 @@ const Dashboard = () => {
       toast.success("Session Created Successfully...");
     },
     onError: (error) => {
-      toast.error(error?.response?.data || "Failed to create Session!");
+      toast.error(error?.response?.data?.msg || "Failed to create Session!");
       // console.log(error);
     },
   });

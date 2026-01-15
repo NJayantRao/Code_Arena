@@ -28,15 +28,6 @@ export const getMyRecentSessions = async (token) => {
   });
   return response.data;
 };
-
-export const getTotalSessions = async (token) => {
-  const response = await axiosInstance.get("/session/myTotalSessions", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
-};
 export const getSessionById = async (id, token) => {
   const response = await axiosInstance.get(`/session/${id}`, {
     headers: {
@@ -47,19 +38,27 @@ export const getSessionById = async (id, token) => {
 };
 
 export const joinSession = async (id, token) => {
-  const response = await axiosInstance.get(`/session/${id}/join`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axiosInstance.post(
+    `/session/${id}/join`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return response.data;
 };
 export const endSession = async (id, token) => {
-  const response = await axiosInstance.get(`/session/${id}/end`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axiosInstance.post(
+    `/session/${id}/end`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return response.data;
 };
 
