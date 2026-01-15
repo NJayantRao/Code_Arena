@@ -30,11 +30,12 @@ const Features = () => {
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body items-center text-center">
             <div className="size-16 bg-green-600/10 rounded-2xl flex items-center justify-center mb-4">
-              <CodeXml  className="size-8 text-green-600" />
+              <CodeXml className="size-8 text-green-600" />
             </div>
             <h3 className="card-title">Live Code Editor</h3>
             <p className="text-base-content/50">
-              Collaborate in real-time syntax highlighting and multi-language support.
+              Collaborate in real-time syntax highlighting and multi-language
+              support.
             </p>
           </div>
         </div>
@@ -45,12 +46,12 @@ const Features = () => {
             </div>
             <h3 className="card-title">Easy Collaboration</h3>
             <p className="text-base-content/50">
-              Share your screen, discuss solutions and learn together in real-time.
+              Share your screen, discuss solutions and learn together in
+              real-time.
             </p>
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

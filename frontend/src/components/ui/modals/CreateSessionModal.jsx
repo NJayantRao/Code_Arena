@@ -72,7 +72,11 @@ const CreateSessionModal = ({
           <button className="btn btn-ghost" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn bg-green-600" onClick={onCreateSession} disabled={isCreating || !roomConfig.problem}>
+          <button
+            className="btn bg-green-600"
+            onClick={onCreateSession}
+            disabled={isCreating || !roomConfig.problem}
+          >
             {isCreating ? (
               <div className="flex gap-2">
                 <Loader2Icon className="size-5 animate-spin" />

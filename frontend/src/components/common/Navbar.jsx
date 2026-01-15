@@ -62,9 +62,9 @@ const Navbar = () => {
               <span className="font-medium hidden sm:inline">Dashboard</span>
             </div>
           </div>
-         <div className="flex items-center justify-center">
-             <UserButton />
-         </div>
+          <div className="flex items-center justify-center">
+            <UserButton />
+          </div>
         </div>
       </div>
     </nav>

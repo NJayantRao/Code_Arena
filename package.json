@@ -9,5 +9,8 @@
   },
   "author": "Jayant N",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "prettier": "3.8.0"
+  }
 }

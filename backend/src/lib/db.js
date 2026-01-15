@@ -1,8 +1,8 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 import { ENV } from "./env.js";
 
 mongoose.connect(ENV.DB_URL);
-const db= mongoose.connection;
+const db = mongoose.connection;
 
 db.on("connected", () => {
   console.log("Mongo DB Server connected successfully...");
@@ -16,4 +16,4 @@ db.on("disconnected", () => {
   console.log("Mongo DB Server disconnectd...");
 });
 
-export {db};
+export { db };
