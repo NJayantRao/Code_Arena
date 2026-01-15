@@ -36,7 +36,7 @@ const Navbar = () => {
             className={`px-4 py-2.5  rounded-lg transition-all duration-200 cursor-pointer ${
               isActive("/problems")
                 ? "bg-green-600 text-black"
-                : "hover-bg-base-200 text-base-content/60 hover:text-base-content"
+                : "hover:bg-base-200 text-base-content/60 hover:text-base-content"
             }`}
             onClick={() => {
               navigate("/problems");

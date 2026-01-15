@@ -100,7 +100,7 @@ const getSessionById = async (req, res) => {
 const joinSession = async (req, res) => {
   try {
     const sessionId = req.params.id;
-    const userId = req.user.id;
+    const userId = req.user._id;
     const clerkId = req.user.clerkId;
 
     const session = await Session.findById(sessionId);

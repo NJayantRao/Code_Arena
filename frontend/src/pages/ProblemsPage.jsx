@@ -5,8 +5,7 @@ import ProblemCard from "../components/ui/cards/ProblemCard";
 
 const ProblemsPage = () => {
   const problemList = Object.values(problems);
-  console.log(problemList);
-
+  // console.log(problemList);
   return (
     <div className="min-h-screen bg-base-200">
       <Navbar />
