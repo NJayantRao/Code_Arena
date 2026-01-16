@@ -18,7 +18,8 @@ import {
   StreamVideo,
   StreamVideoClient,
 } from "@stream-io/video-react-sdk";
-import VidoCallUI from "../components/VidoCallUI";
+import VidoCallUI from "../components/VideoCallUI";
+import VideoCallUI from "../components/VideoCallUI";
 
 const Session = () => {
   const { getToken } = useAuth();
@@ -31,7 +32,7 @@ const Session = () => {
   //get session by id
 
   const sessionById = useQuery({
-    queryKey: ["sessionById"],
+    queryKey: ["sessionById", id],
     queryFn: async () => {
       const token = await getToken();
       return getSessionById(id, token);
@@ -68,6 +69,7 @@ const Session = () => {
     },
     onSuccess: () => {
       toast.success("Joined Session Successfully...");
+      refetch();
     },
     onError: (error) => {
       toast.error(error?.response?.data?.msg || "Failed to join Session!");
@@ -76,7 +78,7 @@ const Session = () => {
   });
 
   const isHost = session?.host?.clerkId === user?.id;
-  const isParticipant = session?.participant?.clerkId === user?._id;
+  const isParticipant = session?.participant?.clerkId === user?.id;
 
   const sessionProblem = session?.problem
     ? Object.values(problems).find((p) => p.title === session.problem)
@@ -90,16 +92,14 @@ const Session = () => {
   //redirect the participant on session ends
   useEffect(() => {
     if (!session || sessionLoading) return;
-    if (session.status === "completed") navigate("/dashboard");
+    if (session.status === "Completed") navigate("/dashboard");
   }, [session, sessionLoading]);
 
   //auto join the user as participant
   useEffect(() => {
     if (!session || !user || sessionLoading) return;
     if (isHost || isParticipant) return;
-    joinSessionMutation.mutate({
-      onSuccess: refetch,
-    });
+    joinSessionMutation.mutate();
   }, [session, user, isHost, isParticipant, sessionLoading, id]);
 
   //on update code
@@ -348,10 +348,11 @@ const Session = () => {
                 </div>
               ) : (
                 <div className="h-full">
-                  <StreamVideo client={streamClient} />
-                  <StreamCall call={call}>
-                    <VidoCallUI chatClient={chatClient} channel={channel} />
-                  </StreamCall>
+                  <StreamVideo client={streamClient}>
+                    <StreamCall call={call}>
+                      <VideoCallUI chatClient={chatClient} channel={channel} />
+                    </StreamCall>
+                  </StreamVideo>
                 </div>
               )}
             </div>

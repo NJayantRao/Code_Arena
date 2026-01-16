@@ -63,7 +63,7 @@ export const endSession = async (id, token) => {
 };
 
 export const getStreamToken = async (token) => {
-  console.log(token);
+  // console.log(token);
   const response = await axiosInstance.get(`/chat/token`, {
     headers: {
       Authorization: `Bearer ${token}`,

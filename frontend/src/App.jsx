@@ -15,7 +15,10 @@ const App = () => {
     <div>
       <Toaster />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={isSignedIn ? <Navigate to={"/dashboard"} /> : <Home />}
+        />
         <Route
           path="/problems"
           element={isSignedIn ? <ProblemsPage /> : <Navigate to={"/"} />}

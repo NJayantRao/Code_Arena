@@ -39,9 +39,15 @@ const VideoCallUI = ({ chatClient, channel }) => {
   }
 
   return (
-    <div className="h-full relative flex gap-2 str-video">
-      <div className="flex-1 flex flex-col gap-3">
-        {/* top header */}
+    <div className="h-full flex overflow-hidden str-video">
+      {/* LEFT VIDEO SECTION */}
+      <div
+        className="flex flex-col gap-3 transition-all duration-300 ease-in-out"
+        style={{
+          width: isChatOpen ? "calc(100% - 20rem)" : "100%",
+        }}
+      >
+        {/* header */}
         <div className="flex items-center justify-between gap-2 bg-base-100 p-3 rounded-lg shadow">
           <div className="flex items-center gap-2">
             <UsersIcon className="w-5 h-5 text-primary" />
@@ -50,11 +56,13 @@ const VideoCallUI = ({ chatClient, channel }) => {
               {participantCount === 1 ? "participant" : "participants"}
             </span>
           </div>
+
           {chatClient && channel && (
             <button
               onClick={() => setIsChatOpen((prev) => !prev)}
-              className={`btn btn-sm gap-2 ${isChatOpen ? "btn-primary" : "btn-ghost"}`}
-              title={isChatOpen ? "Hide chat" : "Show chat"}
+              className={`btn btn-sm gap-2 ${
+                isChatOpen ? "btn-primary" : "btn-ghost"
+              }`}
             >
               <MessageSquareIcon className="size-4" />
               Chat
@@ -62,8 +70,8 @@ const VideoCallUI = ({ chatClient, channel }) => {
           )}
         </div>
 
-        {/* video */}
-        <div className="flex-1 bg-base-300 rounded-lg overflow-hidden relative">
+        {/* video layout */}
+        <div className="flex-1 bg-base-300 rounded-lg overflow-hidden">
           <SpeakerLayout />
         </div>
 
@@ -73,27 +81,25 @@ const VideoCallUI = ({ chatClient, channel }) => {
         </div>
       </div>
 
-      {/* chat sidebar */}
+      {/* RIGHT CHAT SECTION */}
       {chatClient && channel && (
         <div
-          className={`flex flex-col rounded-lg shadow overflow-hidden bg-[#272a30] transition-all duration-300 ease-in-out ${
-            isChatOpen ? "w-80" : "w-0"
-          }`}
-          style={{ minWidth: isChatOpen ? "20rem" : 0 }}
+          className="flex flex-col rounded-lg shadow bg-[#272a30] border-l border-[#3a3d44] transition-all duration-300 ease-in-out"
+          style={{
+            width: isChatOpen ? "20rem" : 0,
+            minWidth: isChatOpen ? "20rem" : 0,
+          }}
         >
-          {/* header */}
           <div className="bg-[#1c1e22] p-3 border-b border-[#3a3d44] flex items-center justify-between">
             <h3 className="font-semibold text-white">Session Chat</h3>
             <button
               onClick={() => setIsChatOpen(false)}
               className="text-gray-400 hover:text-white transition-colors"
-              title="Close chat"
             >
-              <XIcon className="size-5" />
+              <XIcon className="size-5 cursor-pointer" />
             </button>
           </div>
 
-          {/* chat UI */}
           <div className="flex-1 overflow-hidden stream-chat-dark">
             <Chat client={chatClient} theme="str-chat__theme-dark">
               <Channel channel={channel}>
