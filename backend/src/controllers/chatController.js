@@ -8,7 +8,7 @@ export async function getStreamToken(req, res) {
     res.status(200).json({
       msg: "Stream Token created Successfully",
       token: token,
-      userId: req.user.id,
+      userId: req.user.clerkId,
       userName: req.user.name,
       userImage: req.user.image,
     });

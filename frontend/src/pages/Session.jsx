@@ -9,7 +9,16 @@ import toast from "react-hot-toast";
 import Navbar from "../components/common/Navbar";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { getDifficultyBadge } from "../lib/difficulty";
-import { Loader2Icon, LogOutIcon } from "lucide-react";
+import { Loader2Icon, LogOutIcon, PhoneOffIcon } from "lucide-react";
+import CodeEditor from "../components/CodeEditor";
+import OutputPanel from "../components/OutputPanel";
+import useStreamClient from "../utils/streamClient";
+import {
+  StreamCall,
+  StreamVideo,
+  StreamVideoClient,
+} from "@stream-io/video-react-sdk";
+import VidoCallUI from "../components/VidoCallUI";
 
 const Session = () => {
   const { getToken } = useAuth();
@@ -29,7 +38,7 @@ const Session = () => {
     },
   });
   const { data: sessionData, isLoading: sessionLoading, refetch } = sessionById;
-  console.log(sessionData);
+  // console.log(sessionData);
   const session = sessionData?.session;
   // console.log(session);
 
@@ -42,6 +51,7 @@ const Session = () => {
     },
     onSuccess: () => {
       toast.success("Session Ended Successfully...");
+      navigate("/dashboard");
     },
     onError: (error) => {
       toast.error(error?.response?.data?.msg || "Failed to end Session!");
@@ -108,6 +118,10 @@ const Session = () => {
   };
   // console.log(code);
 
+  //stream info.
+  const { streamClient, call, chatClient, channel, isInitializingCall } =
+    useStreamClient(session, sessionLoading, isHost, isParticipant, getToken);
+
   const handleRunCode = async () => {
     setIsRunning(true);
     setOutput(null);
@@ -132,9 +146,10 @@ const Session = () => {
       <Navbar />
       <div className="flex-1">
         <PanelGroup direction="horizontal">
-          {/* left panel */}
+          {/* left section */}
           <Panel defaultSize={50} minSize={30}>
             <PanelGroup direction="vertical">
+              {/* problem description panel */}
               <Panel defaultSize={50} minSize={20}>
                 <div className="h-full overflow-y-auto bg-base-200">
                   <div className="p-6 bg-base-100 border-b border-base-300">
@@ -162,7 +177,7 @@ const Session = () => {
                           {session?.difficulty.slice(0, 1).toUpperCase() +
                             session?.difficulty.slice(1) || "Easy"}
                         </span>
-                        {console.log(session)}
+                        {/* {console.log(session)} */}
                         {isHost && session?.status === "Active" && (
                           <button
                             onClick={handleEndSession}
@@ -175,7 +190,7 @@ const Session = () => {
                               <LogOutIcon className="w-4 h-4" />
                             )}
                             End Session
-                            {console.log(session.stauts)}
+                            {/* {console.log(session.stauts)} */}
                           </button>
                         )}
                         {session?.status === "completed" && (
@@ -280,12 +295,67 @@ const Session = () => {
                 </div>
               </Panel>
               <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-col-resize" />
-              <Panel defaultSize={50} minSize={20}></Panel>
+
+              {/* code editor panel */}
+              <Panel defaultSize={50} minSize={20}>
+                <PanelGroup direction="vertical">
+                  {/* editor panel */}
+                  <Panel defaultSize={70} minSize={20}>
+                    <CodeEditor
+                      selectedLanguage={selectedLanguage}
+                      code={code}
+                      isRunning={isRunning}
+                      onLanguageChange={handleLanguageChange}
+                      onCodeChange={setCode}
+                      onRunCode={handleRunCode}
+                    />
+                  </Panel>
+                  <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-col-resize" />
+
+                  {/* output panel */}
+                  <Panel defaultSize={30} minSize={20}>
+                    <OutputPanel output={output} />
+                  </Panel>
+                </PanelGroup>
+              </Panel>
             </PanelGroup>
           </Panel>
-          <PanelResizeHandle className="w-2 bg-base-200 hover:bg-primary transition-colors cursor-col-resize" />
-          {/* right panel */}
-          <Panel defaultSize={50} minSize={30}></Panel>
+          <PanelResizeHandle className="w-2 bg-base-300 hover:bg-primary transition-colors cursor-row-resize" />
+
+          {/* right section */}
+          <Panel defaultSize={50} minSize={30}>
+            <div className="h-full p-4  bg-base-200 overflow-auto">
+              {isInitializingCall ? (
+                <div className="h-full flex items-center justify-center">
+                  <div className="text-center">
+                    <Loader2Icon className="w-12 h-12 mx-auto animate-spin text-primary mb-4" />
+                    <p className="text-lg">Connecting to video call...</p>
+                  </div>
+                </div>
+              ) : !streamClient || !call ? (
+                <div className="h-full flex items-center justify-center">
+                  <div className="card bg-base-100 shadow-xl max-w-md">
+                    <div className="card-body items-center text-center">
+                      <div className="w-24 h-24 bg-error/10 rounded-full flex items-center justify-center mb-4">
+                        <PhoneOffIcon className="w-12 h-12 text-error" />
+                      </div>
+                      <h2 className="card-title text-2xl">Connection Failed</h2>
+                      <p className="text-base-content/70">
+                        Unable to connect to the video call
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="h-full">
+                  <StreamVideo client={streamClient} />
+                  <StreamCall call={call}>
+                    <VidoCallUI chatClient={chatClient} channel={channel} />
+                  </StreamCall>
+                </div>
+              )}
+            </div>
+          </Panel>
         </PanelGroup>
       </div>
     </div>

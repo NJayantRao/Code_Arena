@@ -123,13 +123,13 @@ const Dashboard = () => {
             recentSessionsCount={recentSessionsCount.length}
           />
           <ActiveSessions
-            sessions={activeSession}
+            sessions={activeSession ?? []}
             isLoading={isActiveSessionLoading}
             isUserInSession={isUserInSession}
           />
         </div>
         <RecentSessions
-          sessions={recentSession}
+          sessions={recentSession ?? []}
           isLoading={isRecentSessionLoading}
         />
       </div>
