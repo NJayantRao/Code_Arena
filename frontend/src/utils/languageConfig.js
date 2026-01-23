@@ -1,9 +1,4 @@
 export const languageConfig = {
-  javascript: {
-    name: "Javascript",
-    image: "/javascript.jpg",
-    monacoLang: "javascript",
-  },
   python: {
     name: "Python",
     image: "/Python-logo.png",
@@ -13,5 +8,15 @@ export const languageConfig = {
     name: "Java",
     image: "/java_logo.png",
     monacoLang: "java",
+  },
+  cpp: {
+    name: "CPP",
+    image: "/cpp.png",
+    monacoLang: "cpp",
+  },
+  javascript: {
+    name: "Javascript",
+    image: "/javascript.jpg",
+    monacoLang: "javascript",
   },
 };

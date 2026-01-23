@@ -7,6 +7,8 @@ import { useUser } from "@clerk/clerk-react";
 import ProblemPage from "./pages/ProblemPage";
 import { Toaster } from "react-hot-toast";
 import Session from "./pages/Session";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const App = () => {
   const { isSignedIn, isLoaded } = useUser();
@@ -14,6 +16,8 @@ const App = () => {
   return (
     <div>
       <Toaster />
+      <Analytics />
+      <SpeedInsights />
       <Routes>
         <Route
           path="/"

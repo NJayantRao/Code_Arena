@@ -10,6 +10,7 @@ const LANGUAGE_VERSIONS = {
   java: { language: "java", version: "15.0.2" },
   python: { language: "python", version: "3.10.0" },
   "c++": { language: "c++", version: "10.2.0" },
+  cpp: { language: "c++", version: "10.2.0" },
   c: { language: "c", version: "10.2.0" },
 };
 
@@ -17,6 +18,7 @@ const LANGUAGE_VERSIONS = {
 export async function executeCode(language, code) {
   try {
     const languageConfig = LANGUAGE_VERSIONS[language];
+    console.log(language);
 
     if (!languageConfig) {
       return { success: false, error: `Unsupported Language: ${language}` };
