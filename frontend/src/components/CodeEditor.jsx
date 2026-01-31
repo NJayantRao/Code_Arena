@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { languageConfig } from "../utils/languageConfig";
 import { Loader2, Play } from "lucide-react";
+import * as Y from "yjs";
+import { WebsocketProvider } from "y-websocket";
+import { MonacoBinding } from "y-monaco";
+
 const CodeEditor = ({
   selectedLanguage,
   code,
@@ -9,7 +13,31 @@ const CodeEditor = ({
   onLanguageChange,
   onCodeChange,
   onRunCode,
+  sessionId,
 }) => {
+  const editorRef = useRef(null);
+
+  const handleEditorMount = (editor, monaco) => {
+    editorRef.current = editor;
+    const ydoc = new Y.Doc();
+    const provider = new WebsocketProvider(
+      "wss://demos.yjs.dev/ws",
+      `session-${sessionId}`,
+      ydoc
+    );
+    const type = ydoc.getText("monaco");
+    if (type.toString().length === 0) {
+      type.insert(0, code); // or whatever template text you want
+    }
+
+    new MonacoBinding(
+      type,
+      editor.getModel(),
+      new Set([editor]),
+      provider.awareness
+    );
+  };
+
   return (
     <div className="h-full bg-base-300 flex flex-col">
       <div className="flex items-center justify-between px-4 py-2 bg-base-100 border-t">
@@ -59,9 +87,10 @@ const CodeEditor = ({
         <Editor
           height={"100%"}
           language={languageConfig[selectedLanguage].monacoLang}
-          value={code}
+          defaultValue={code}
           onChange={onCodeChange}
           theme="vs-dark"
+          onMount={handleEditorMount}
           options={{
             fontSize: 14,
             lineNumbers: "on",

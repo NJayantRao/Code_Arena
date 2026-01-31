@@ -308,6 +308,7 @@ const Session = () => {
                       onLanguageChange={handleLanguageChange}
                       onCodeChange={setCode}
                       onRunCode={handleRunCode}
+                      sessionId={id}
                     />
                   </Panel>
                   <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-col-resize" />
